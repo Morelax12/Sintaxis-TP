@@ -1,0 +1,16 @@
+TAD Lista de Ventas - Especificación
+
+crearListaVentas()
+- Crea y retorna una lista vacía
+
+agregarVenta(lista, venta)
+- Agrega una venta a la lista 
+
+eliminarVenta(lista, venta)
+- Elimina una venta de la lista
+
+recuperarVenta(lista, i)
+- Recupera la i-ésima venta de la lista 
+
+tamanio(lista)
+- Retorna la cantidad de ventas de la lista 
