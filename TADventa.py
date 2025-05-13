@@ -21,25 +21,25 @@ def cargarVenta(venta,codigo,nombre,droga,obraSocial,plan,importe,fechaHora):   
 
 #Salida de información
 def verCodigo(venta):            #imprime el código del medicamento de una venta
-    return[0]
+    return venta[0]
 
 def verNombre(venta):           #imprime el nombre del medicamento de una venta
-    return[1]
+    return venta[1]
 
 def verDroga(venta):            #imprime la droga del medicamento de una venta
-    return[2]
+    return venta[2]
 
 def verObraSocial(venta):       #imprime la obra social refente a una venta
-    return[3]
+    return venta[3]
 
 def verPlan(venta):             #imprime el plan de la obra social referente a una venta
-    return[4]
+    return venta[4]
 
 def verImporte(venta):          #imprime el importe de una venta
-    return[5]
+    return venta[5]
 
 def verFechaHora(venta):        #imprime la fecha y hora de realización de una venta
-    return[6]
+    return venta[6]
 
 #Procesamiento de datos
 def asignarVenta(venta1,venta2): #copia los datos de la venta1 a la venta2 
