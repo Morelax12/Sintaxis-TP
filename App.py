@@ -1,8 +1,8 @@
 #EJERCICIO 6 FARMACIA
 
 from datetime import datetime
-from TadVenta import *
-from TADListaVentas import *
+from TADventa import *
+from TADlistadoVentas import *
 from TADcolaObraSoc import *
 
 # ------ FUNCIONES PARA EL PROGRAMA ------
@@ -22,6 +22,21 @@ def MENU ():
     print("\n***********\n")
     return a  
 
+def eliminar_Droga_UltimoMes (lista,drogaB,fechaActual):
+    i= 1
+
+    while (i <= tamanio(lista)):
+
+        v = recuperarVenta(lista, i) #recupera la venta de la posicion i-esima
+        vFecha = verFechaHora(lista)
+        auxLista = crearListaVentas()
+
+        if verDroga(v) == drogaB and vFecha.month == fechaActual.month and vFecha.year == fechaActual.year: #evalia si la droga del elem V es = a la ingresada x el usuario, lo mismo para la fecha
+            agregarVenta(auxLista,v) #guarda las ventas que van a ser eliminadas
+            eliminarVenta(lista, i)
+        i+=1
+
+    return auxLista
 
 def imprimirVenta(venta):
     #Imprimir los datos de una venta
@@ -35,6 +50,25 @@ def imprimirVenta(venta):
     Fecha: {fecha.strftime("%d")}/{fecha.strftime("%m")}/{fecha.strftime("%Y")} {fecha.strftime("%X")}
           \n""")
 
+def imprimirListaVentas(lista):
+    i=1
+
+    print("\n**LISTADO DE VENTAS**\n\n")
+    while(tamanio(lista)>=i):
+
+        VentaRecu=recuperarVenta(lista,i)
+        
+        print("*** VENTA",i,"*** \n")
+        print("-CODIGO DEL MEDICAMENTO: ",verCodigo(VentaRecu),"\n" \
+        "-NOMBRE DEL MEDICAMENTO: ",verNombre(VentaRecu),"\n" \
+        "-DROGA: ",verDroga(VentaRecu),"\n" \
+        "-OBRA SOCIAL DEL CLIENTE: ",verObraSocial(VentaRecu),"\n" \
+        "-TIPO DE PLAN: ",verPlan(VentaRecu),"\n"
+        "-IMPORTE: ",verImporte(VentaRecu),"\n"
+        "-FECHA DE VENTA: ",verFechaHora(VentaRecu),"\n")
+       
+        i += 1
+    
 def imprimirCola_de_ObrasSociales():
 #codigo
 
@@ -92,6 +126,14 @@ while (opcion != 0):
 
     #Eliminar venta por droga y las mismas registradas en el ultimo mes
     elif ( opcion == 6):
+
+        drogaD = input("Ingresar el nombre de la Droga que desea eliminar sus ventas: ")
+        fechaAct = datetime.now()
+
+        ventasEliminadas = eliminar_Droga_UltimoMes (lista_ventas,drogaD,fechaAct)
+
+        print(" \n\n** LAS VENTAS ELIMINADAS DEL ULTIMO MES DE LA DROGA {drogaD} **\n\n")
+        imprimirListaVentas(lista_ventas)
 
     #Mostrar ventas registrada (cola) por una obra social especifica
     elif ( opcion == 7):
