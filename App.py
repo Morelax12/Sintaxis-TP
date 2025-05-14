@@ -2,7 +2,7 @@
 
 from datetime import datetime
 from TADventa import *
-from TADlistadoVentas import *
+from TADListaVentas import *
 from TADcolaObraSoc import *
 
 # ------ FUNCIONES PARA EL PROGRAMA ------

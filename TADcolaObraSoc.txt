@@ -1,0 +1,19 @@
+TAD Cola Obra Social - Especificación
+
+crearColaObraSoc()
+- Crea y retorna una cola vacía
+
+esVacia(cola)
+- Retorna True si la cola no tiene elementos
+
+encolar(cola, elemento)
+- Agrega un elemento al final de la cola 
+
+desencolar(cola)
+- Elimina y retorna el primer elemento de la cola 
+
+tamanioCola(cola)
+- Retorna la cantidad de elementos de la cola 
+
+copiarCola(cola1, cola2)
+- Copia la cola2 en la cola1 

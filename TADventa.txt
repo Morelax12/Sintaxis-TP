@@ -1,0 +1,52 @@
+TAD Venta - Especificación
+
+crearVenta()
+- Crea y retorna una venta vacía
+
+cargarVenta(venta, codigo, nombre, droga, obraSocial, plan, importe, fechaHora)
+- Asigna valores a una venta 
+
+verCodigo(venta)
+- Retorna el código del medicamento de una venta 
+
+verNombre(venta)
+- Retorna el nombre del medicamento de una venta 
+
+verDroga(venta)
+- Retorna la droga del medicamento de una venta
+
+verObraSocial(venta)
+- Retorna la obra social referente a una venta 
+
+verPlan(venta)
+- Retorna el plan de la obra social referente a una venta 
+
+verImporte(venta)
+- Retorna el importe de una venta 
+
+verFechaHora(venta)
+- Retorna la fecha y hora de realización de una venta 
+
+asignarVenta(venta1, venta2)
+- Copia los datos de la venta1 a la venta2 
+
+cambiarCodigo(venta, codigo)
+- Modifica el codigo del medicamento de una venta 
+
+cambiarNombre(venta, nombre)
+- Modifica el nombre del medicamento de una venta 
+
+cambiarDroga(venta, droga)
+- Modifica la droga del medicamento de una venta 
+
+cambiarObraSocial(venta, obraSocial)
+- Modifica la obra social referente a una venta 
+cambiarPlan(venta, plan)
+- Modifica el plan de la obra social referente a una venta 
+
+cambiarImporte(venta, importe)
+- Modifica el importe de una venta 
+
+cambiarFechaHora(venta, fechaHora)
+- Modifica la fecha y hora de realización de una venta 
+

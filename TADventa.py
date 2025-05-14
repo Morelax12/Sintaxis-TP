@@ -29,7 +29,7 @@ def verNombre(venta):           #imprime el nombre del medicamento de una venta
 def verDroga(venta):            #imprime la droga del medicamento de una venta
     return venta[2]
 
-def verObraSocial(venta):       #imprime la obra social refente a una venta
+def verObraSocial(venta):       #imprime la obra social referente a una venta
     return venta[3]
 
 def verPlan(venta):             #imprime el plan de la obra social referente a una venta
