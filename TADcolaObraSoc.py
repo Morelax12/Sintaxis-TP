@@ -12,7 +12,7 @@ def desencolar(cola):
     del cola[0]
     return elem
 
-def tamanio(cola):
+def tamanioCola(cola):
     return len(cola)
 
 def copiarCola(cola1,cola2):
