@@ -25,15 +25,16 @@ def MENU ():
 def eliminar_Droga_UltimoMes (lista,drogaB,fechaActual):
     i= 1
 
+    auxLista = crearListaVentas()
+
     while (i <= tamanio(lista)):
 
         v = recuperarVenta(lista, i) #recupera la venta de la posicion i-esima
-        vFecha = verFechaHora(lista)
-        auxLista = crearListaVentas()
+        vFecha = verFechaHora(v)
 
         if verDroga(v) == drogaB and vFecha.month == fechaActual.month and vFecha.year == fechaActual.year: #evalia si la droga del elem V es = a la ingresada x el usuario, lo mismo para la fecha
             agregarVenta(auxLista,v) #guarda las ventas que van a ser eliminadas
-            eliminarVenta(lista, i)
+            eliminarVenta(lista, v)
         i+=1
 
     return auxLista
@@ -42,12 +43,12 @@ def imprimirVenta(venta):
     #Imprimir los datos de una venta
     fecha = verFechaHora(venta)
     print(f"""\n-CODIGO DEL MEDICAMENTO: {verCodigo(venta)}
-    -NOMBRE DEL MEDICAMENTO: {verNombre(venta)}
-    -DROGA: {verDroga(venta)}
-    -OBRA SOCIAL DEL CLIENTE: {verObraSocial(venta)}
-    -PLAN: {verPlan(venta)}
-    -IMPORTE: {verImporte(venta)}
-    -FECHA: {fecha.strftime("%d")}/{fecha.strftime("%m")}/{fecha.strftime("%Y")} {fecha.strftime("%X")}
+-NOMBRE DEL MEDICAMENTO: {verNombre(venta).upper()}
+-DROGA: {verDroga(venta).upper()}
+-OBRA SOCIAL DEL CLIENTE: {verObraSocial(venta).upper()}
+-PLAN: {verPlan(venta).upper()}
+-IMPORTE: {verImporte(venta)}
+-FECHA: {fecha.strftime("%d")}/{fecha.strftime("%m")}/{fecha.strftime("%Y")} {fecha.strftime("%X")}
           \n""")
 
 def imprimirListaVentas(lista):
@@ -56,9 +57,9 @@ def imprimirListaVentas(lista):
     print("\n**LISTADO DE VENTAS**\n\n")
     while(tamanio(lista)>=i):
 
-        ventaRecu=recuperarVenta(lista,i)
+        ventaRecu = recuperarVenta(lista, i)
         
-        print("*** VENTA",i,"*** \n")
+        print("*** DATOS DE LA VENTA", i ,"*** \n")
         imprimirVenta(ventaRecu)
        
         i += 1
@@ -82,13 +83,13 @@ def imprimirCola_de_ObrasSociales(cola):
      
     while (tamanioCola(cola) != 0):                 #Repite condicionalmente mientras 
         venta = desencolar(cola)                #Desencola una venta
-
+        fecha = verFechaHora(venta)
         #Impresión de datos de la venta
         
         print(f"""   
-            -NOMBRE DEL MEDICAMENTO: {verNombre(venta)}
-            -DROGA: {verDroga(venta)}
-            -FECHA DE LA VENTA: {verFechaHora(venta)}
+            -NOMBRE DEL MEDICAMENTO: {verNombre(venta).upper()}
+            -DROGA: {verDroga(venta).upper()}
+            -FECHA DE LA VENTA: {fecha.strftime("%d")}/{fecha.strftime("%m")}/{fecha.strftime("%Y")} {fecha.strftime("%X")}
         """)
     
 #codigo
@@ -152,26 +153,18 @@ while (opcion != 0):
     #Eliminar venta por droga y las mismas registradas en el ultimo mes
     elif ( opcion == 6):
 
-        drogaD = input("Ingresar el nombre de la Droga que desea eliminar sus ventas: ")
+        drogaD = input("Ingresar el nombre de la Droga que desea eliminar sus ventas: ").lower()
         #pregunto la fecha ya que esto es una simulacion, sino se declararia la funcion para registrar la fecha actual
-        while True:
-            fecha_str = input("Introduce la fecha y hora (formato: DD/MM/AAAA HH:MM): ")
-            try:
-                fecha_dt = datetime.strptime(fecha_str, "%d/%m/%Y %H:%M") #convierte la fecha str en un objeto datetime
-                break  # Salir del bucle si la conversión fue exitosa
-            except ValueError:
-                print("Formato incorrecto. Intenta de nuevo con el formato DD/MM/AAAA HH:MM.")
+        fecha_dt = ingreso_de_FechayHora()
 
-            print("Fecha y hora ingresadas:", fecha_dt)
+        ventasEliminadas = eliminar_Droga_UltimoMes(lista_ventas,drogaD,fecha_dt)
 
-        ventasEliminadas = eliminar_Droga_UltimoMes (lista_ventas,drogaD,fecha_dt)
-
-        print(" \n\n** LAS VENTAS ELIMINADAS DEL ULTIMO MES DE LA DROGA {drogaD} **\n\n")
+        print(f" \n\n** LAS VENTAS ELIMINADAS DEL ULTIMO MES DE LA DROGA {drogaD.upper()} **\n\n")
         imprimirListaVentas(ventasEliminadas)
 
     #Mostrar ventas registrada (cola) por una obra social especifica
     elif ( opcion == 7):
-        obraSocialD = input("Ingresa la Obra Social de la que desea conocer sus ventas: ")
+        obraSocialD = input("Ingresa la Obra Social de la que desea conocer sus ventas: ").lower()
 
         i = 1
         while(tamanio(lista_ventas) >= i):
