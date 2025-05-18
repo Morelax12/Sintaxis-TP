@@ -4,8 +4,10 @@ from datetime import datetime
 from TADventa import *
 from TADListaVentas import *
 from TADcolaObraSoc import *
+from TAD_lista_obra_social import*
+from TAD_obra_social import*
 
-# ------ FUNCIONES PARA EL PROGRAMA ------
+#------------------------------------------------ FUNCIONES PARA EL PROGRAMA ------------------------------------------------
 def MENU ():
 
     print("*** ADMINISTRAR LAS VENTAS FARMACEUTICAS ***\n\n" \
@@ -21,6 +23,8 @@ def MENU ():
     a= int(input(": "))
     print("\n***********\n")
     return a  
+
+#--------------------------------- FUNCION DE OPCION 6 ---------------------------------
 
 def eliminar_Droga_UltimoMes (lista,drogaB,fechaActual):
     i= 1
@@ -39,30 +43,7 @@ def eliminar_Droga_UltimoMes (lista,drogaB,fechaActual):
 
     return auxLista
 
-def imprimirVenta(venta):
-    #Imprimir los datos de una venta
-    fecha = verFechaHora(venta)
-    print(f"""\n-CODIGO DEL MEDICAMENTO: {verCodigo(venta)}
--NOMBRE DEL MEDICAMENTO: {verNombre(venta).upper()}
--DROGA: {verDroga(venta).upper()}
--OBRA SOCIAL DEL CLIENTE: {verObraSocial(venta).upper()}
--PLAN: {verPlan(venta).upper()}
--IMPORTE: {verImporte(venta)}
--FECHA: {fecha.strftime("%d")}/{fecha.strftime("%m")}/{fecha.strftime("%Y")} {fecha.strftime("%X")}
-          \n""")
-
-def imprimirListaVentas(lista):
-    i=1
-
-    print("\n**LISTADO DE VENTAS**\n\n")
-    while(tamanio(lista)>=i):
-
-        ventaRecu = recuperarVenta(lista, i)
-        
-        print("*** DATOS DE LA VENTA", i ,"*** \n")
-        imprimirVenta(ventaRecu)
-       
-        i += 1
+#--------------------------------- FUNCION DE INGRESAR FECHA Y HORA ---------------------------------
 
 def ingreso_de_FechayHora():
 
@@ -79,6 +60,33 @@ def ingreso_de_FechayHora():
 
     return fecha_dt
 
+#--------------------------------- FUNCIONES DE IMPRESION ---------------------------------
+
+def imprimirVenta(venta):
+    #Imprimir los datos de una venta
+    fecha = verFechaHora(venta)
+    print(f"""\n-CODIGO DEL MEDICAMENTO: {verCodigo(venta)}
+    -NOMBRE DEL MEDICAMENTO: {verNombre(venta).upper()}
+    -DROGA: {verDroga(venta).upper()}
+    -OBRA SOCIAL DEL CLIENTE: {verObraSocial(venta).upper()}
+    -PLAN: {verPlan(venta).upper()}
+    -IMPORTE: {verImporte(venta)}
+    -FECHA: {fecha.strftime("%d")}/{fecha.strftime("%m")}/{fecha.strftime("%Y")} {fecha.strftime("%X")}
+            \n""")
+
+def imprimirListaVentas(lista):
+    i=1
+
+    print("\n**LISTADO DE VENTAS**\n\n")
+    while(tamanio(lista)>=i):
+
+        ventaRecu = recuperarVenta(lista, i)
+        
+        print("*** DATOS DE LA VENTA", i ,"*** \n")
+        imprimirVenta(ventaRecu)
+       
+        i += 1
+
 def imprimirCola_de_ObrasSociales(cola):
      
     while (tamanioCola(cola) != 0):                 #Repite condicionalmente mientras 
@@ -92,13 +100,16 @@ def imprimirCola_de_ObrasSociales(cola):
             -FECHA DE LA VENTA: {fecha.strftime("%d")}/{fecha.strftime("%m")}/{fecha.strftime("%Y")} {fecha.strftime("%X")}
         """)
     
-#codigo
+
+
+#------------------------------------------------ SIMULACION DEL PROGRAMA ------------------------------------------------
 
 # -- DECLARACION DE VARIABLES --
 colaObrasS = crearColaObraSoc()
 lista_ventas = crearListaVentas()
 
-# ----- PROGRAMA PRINCIPAL -----
+#--------------------------------- PROGRAMA ---------------------------------
+
 print("\n\n*** BIENVENIDOS AL PROGRAMA REGISTRAR VENTAS FARMACEUTICAS *** \n\n")
 
 opcion = MENU()
@@ -106,110 +117,166 @@ opcion = MENU()
 #CAMBIAR POR CASE
 while (opcion != 0):
 
-    if (opcion == 1):
-    #Registrar nuevas ventas y cargarlas en la lista de ventas
-        print("Ingreso de nuevas ventas de medicamentos. \n")
-        s = "si"
-        while (s == "si"):
-            print("Carga de una venta nueva. \n")
-            venta = crearVenta()
-            cod = int(input("Ingrese el código del medicamento: "))
-            nom = input("Ingrese el nombre del medicamento: ").lower()
-            dro = input("Ingrese la droga: ").lower()
-            os = input("Ingrese la Obra Social: ").lower()
-            plan = input("Ingrese el plan: ").lower()
-            imp = float(input("Ingrese el importe: "))
-            
-            # Pedir al usuario que introduzca la fecha y hora
-            fechaD = ingreso_de_FechayHora()
+    match opcion:
 
-            cargarVenta(venta, cod, nom, dro, os, plan, imp, fechaD)
-            agregarVenta(lista_ventas, venta)
-            print("Venta cargada con éxito. \n")
-            s = input("¿Desea cargar otra venta? si/no: ").lower()
-            
-        print("\nFinalización de ingreso de nuevas ventas de medicamentos. \n")
-
-    #Modificar una venta especifica de la Lista por Codigo del Medicamento
-    elif ( opcion == 2):
-        print("...\n")
-        
-    #Eliminar venta especifica de la Lista por Codigo de medicamento
-    elif ( opcion == 3):
-        print("...\n")
-    
-    elif (opcion == 4):
-    #Mostrar todas las ventas registradas
-        if (tamanio(lista_ventas) > 0):
-            print("\n** LISTADO DE VENTAS ** \n\n")
-            imprimirListaVentas(lista_ventas)
-        else:
-            print("No hay ventas registradas. \n")
-
-    #Mostrar informe (total recaudado) de todas las Obras sociales
-    elif ( opcion == 5):
-        print("...\n")
-
-    #Eliminar venta por droga y las mismas registradas en el ultimo mes
-    elif ( opcion == 6):
-
-        drogaD = input("Ingresar el nombre de la Droga que desea eliminar sus ventas: ").lower()
-        #pregunto la fecha ya que esto es una simulacion, sino se declararia la funcion para registrar la fecha actual
-        fecha_dt = ingreso_de_FechayHora()
-
-        ventasEliminadas = eliminar_Droga_UltimoMes(lista_ventas,drogaD,fecha_dt)
-
-        print(f" \n\n** LAS VENTAS ELIMINADAS DEL ULTIMO MES DE LA DROGA {drogaD.upper()} **\n\n")
-        imprimirListaVentas(ventasEliminadas)
-
-    #Mostrar ventas registrada (cola) por una obra social especifica
-    elif ( opcion == 7):
-        obraSocialD = input("Ingresa la Obra Social de la que desea conocer sus ventas: ").lower()
-
-        i = 1
-        while(tamanio(lista_ventas) >= i):
-
-            v = recuperarVenta(lista_ventas,i)
-
-            if( verObraSocial(v) == obraSocialD ):
-                encolar(colaObrasS,v)
+        case 1:
+        #Registrar nuevas ventas y cargarlas en la lista de ventas
+            print("Ingreso de nuevas ventas de medicamentos. \n")
+            s = "si"
+            while (s == "si"):
+                print("Carga de una venta nueva. \n")
+                venta = crearVenta()
+                cod = int(input("Ingrese el código del medicamento: "))
+                nom = input("Ingrese el nombre del medicamento: ").lower()
+                dro = input("Ingrese la droga: ").lower()
+                os = input("Ingrese la Obra Social: ").lower()
+                plan = input("Ingrese el plan: ").lower()
+                imp = float(input("Ingrese el importe: "))
                 
-            i += 1
-        imprimirCola_de_ObrasSociales(colaObrasS)
+                # Pedir al usuario que introduzca la fecha y hora
+                fechaD = ingreso_de_FechayHora()
 
-    #mostrar las ventas registradas en el dia hasta una hora elegida
-    elif ( opcion == 8):
+                cargarVenta(venta, cod, nom, dro, os, plan, imp, fechaD)
+                agregarVenta(lista_ventas, venta)
+                print("Venta cargada con éxito. \n")
+                s = input("¿Desea cargar otra venta? si/no: ").lower()
+                
+            print("\nFinalización de ingreso de nuevas ventas de medicamentos. \n")
 
-        print("\n ** INFORME DE VENTAS HASTA EL MOMENTO **\n\n" \
-        "Ingresar Fecha actual: ")
+        #Modificar una venta especifica de la Lista por Codigo del Medicamento
+        case 2:
+            print("...\n")
+            
+        #Eliminar venta especifica de la Lista por Codigo de medicamento
+        case 3:
+            print("...\n")
         
-        fechaD = ingreso_de_FechayHora()
+        case 4:
+        #Mostrar todas las ventas registradas
+            if (tamanio(lista_ventas) > 0):
+                print("\n** LISTADO DE VENTAS ** \n\n")
+                imprimirListaVentas(lista_ventas)
+            else:
+                print("No hay ventas registradas. \n")
 
-        listaVentasInforme = [0,0.0]
+        #Mostrar informe (total recaudado) de todas las Obras sociales
+        case 5:
+            print("...\n")
 
-        #contadores
-        i = 1
-        cantM = 0
-        montoTotal = 0.0
+        #Eliminar venta por droga y las mismas registradas en el ultimo mes
+        case 6:
 
-        while(tamanio(lista_ventas) >= i):
+            # Bucle para verificar si la droga ingresada está en la lista
+            while True:
+                drogaD = input("Ingresar el nombre de la Droga que desea eliminar sus ventas: ")
 
-            v = recuperarVenta(lista_ventas,i)
-            fechaRecu = verFechaHora(v)
+                # Verificar si la droga existe en la lista
+                droga_encontrada = False #creamos una bandera (para verificar si algo ocurrio(true) sino (false), la inicalizamos en false)
 
-            if( fechaRecu.day == fechaD.day and fechaRecu.month == fechaD.month and fechaRecu.year == fechaD.year and  fechaRecu.hour <= fechaD.hour and fechaRecu.minute <= fechaD.minute):
-                cantM  += 1
-                montoVenta = verImporte(v)
-                montoTotal = montoTotal + montoVenta
-          
-            i += 1
-        
-        print("\n\n ** INFORME DE LAS VENTAS ** \n\n" \
-        "-CANTIDAD DE MEDICAMENTOS VENDIDOS HASTA LA FECHA: ",cantM,"\n" \
-        "-MONTO TOTAL RECAUDADO: ",montoTotal,"\n")
+                for venta in lista_ventas: #recorre la lista ventas, en venta se almacena cada venta encontrada
+                    if verDroga(venta).lower() == drogaD.lower(): #verifica si la droga se encuentra en la lista de ventas
+                        droga_encontrada = True
+                        break
+                
+                #evaluamos la bandera, para saber que ocurrio, si encontro la droga(true) sino (false)
+
+                if not droga_encontrada: #si drogra encontrada es falso, se informa y se muestran opciones
+                    print(f"\nLa droga '{drogaD}' no se encuentra registrada en las ventas.")
+
+                    #opciones 
+                    eleccion = input("¿Desea intentar con otra droga? (S/N): ").strip().lower() #strip elimina espacios en blanco al inicio y al final
+                    if eleccion != 's':
+                        print("Volviendo al menú principal...\n")
+                        break  # Salimos del while general (opción 6), volvemos al menu principal, ya que si se llega a este break termina la ejecucion de la opcion 6
+                
+                #si droga encontrada es true, se pide la fecha y se eliminan las ventas del mes
+                else: 
+                    # Pregunto la fecha (ya que es una simulación)
+                    while True:
+                        fecha_str = input("Introduce la fecha y hora (formato: DD/MM/AAAA HH:MM): ")
+                        try:
+                            fecha_dt = datetime.strptime(fecha_str, "%d/%m/%Y %H:%M")
+                            break
+                        except ValueError:
+                            print("Formato incorrecto. Intenta de nuevo con el formato DD/MM/AAAA HH:MM.")
+
+                    print("Fecha y hora ingresadas:", fecha_dt)
+
+                    # Proceder a eliminar ventas
+                    ventasEliminadas = eliminar_Droga_UltimoMes(lista_ventas, drogaD, fecha_dt)
+
+                    print(f"\n\n** LAS VENTAS ELIMINADAS DEL ULTIMO MES DE LA DROGA {drogaD} **\n\n")
+                    imprimirListaVentas(ventasEliminadas)
+
+                    break  # Salimos del while principal ya que ya se realizó la acción
+
+
+        #Mostrar ventas registrada (cola) por una obra social especifica
+        case 7:
+            while True:
+
+                obraSocialD = input("Ingresa la Obra Social de la que desea conocer sus ventas: ").lower()
+
+                #verificamos que la obrasocialD exista en el listado de ventas
+                obraS_encontrada=False
+
+                for venta in lista_ventas:
+                    if verObraSocial(venta).lower() == obraSocialD.lower():
+                        obraS_encontrada = True
+                        break
+
+                #si obraS encontrada es falsa(no se encuentra en el listado), mostrar opciones
+                if not obraS_encontrada:
+                    print(f"\nLa Obra Social '{obraSocialD}' no se encuentra registrada en las ventas.\n")
+                    
+                    #opciones 
+                    eleccion = input("¿Desea intentar con otra droga? (S/N): ").strip().lower() #strip elimina espacios en blanco al inicio y al final
+                    if eleccion != 's':
+                        print("Volviendo al menú principal...\n")
+                        break  # Salimos del while general (opción 6)   
+                #si se encuentra la obra social(obraS = true)
+                else:
+                    #recorremos la lista
+                    for venta in lista_ventas:
+                        #evaluamos si la O.S de la venta recuperada es igual a la desada
+                        if verObraSocial(venta).lower() == obraSocialD.lower():
+                            encolar(colaObrasS,venta)
+
+                    imprimirCola_de_ObrasSociales(colaObrasS)
+                    break #salimos del while principal
+
+        #mostrar las ventas registradas en el dia hasta una hora elegida
+        case 8:
+
+            print("\n ** INFORME DE VENTAS HASTA EL MOMENTO **\n\n" \
+                    "Ingresar Fecha actual: ")
+                    
+            fechaD = ingreso_de_FechayHora() #se registra la fecha deseada para analizar las ventas del dia,ingresada por el usuario
+
+            #contadores
+            i = 1                       #v.Control
+            cantM = 0                   #Contador de cantidad de medicamentos vendidos
+            montoTotal = 0.0            #v. almacena el monto total recaudado de todas las ventas
+
+            while(tamanio(lista_ventas) >= i): #recorremos la lista_ventas hasta alcanzar su ultima venta
+
+                v = recuperarVenta(lista_ventas,i) #recuperamos una venta en la posicion i-esinma
+                fechaRecu = verFechaHora(v)        #obtenemos la fecha de la venta recuperada, para luego usarla como condicion
+
+                #para tener en cuenta la venta en el informe(fechaRecu), esta debe: ser el mismo dia,mes y año que fechaD, y la hora debe ser menor o igual a la de fechaD
+                if( fechaRecu.day == fechaD.day and fechaRecu.month == fechaD.month and fechaRecu.year == fechaD.year and  fechaRecu.hour <= fechaD.hour and fechaRecu.minute <= fechaD.minute):
+                    cantM  += 1                             #aumentamos el contador de medicamentos, ya que la venta fue valida(pertenece al mismo dia)
+                    montoVenta = verImporte(v)              #obtenemos cuanto valio la venta
+                    montoTotal = montoTotal + montoVenta    #sumamos al total el monto de la venta
+                    
+                i += 1
+                    
+            print("\n\n ** INFORME DE LAS VENTAS ** \n\n" \
+            "-CANTIDAD DE MEDICAMENTOS VENDIDOS HASTA LA FECHA: ",cantM,"\n" \
+            "-MONTO TOTAL RECAUDADO: ",montoTotal,"\n")
 
     opcion = MENU()
-    
+
 print("El programa finalizó.")   
     
 
