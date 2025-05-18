@@ -24,6 +24,91 @@ def MENU ():
     print("\n***********\n")
     return a  
 
+#--------------------------------- FUNCION DE DESCUENTO PARA PLAN ESPECIFICO ---------------------------------
+
+#Se considera el usuario cargará una cantidad LIMITADA de planes: Plan GOLD, plan SILVER, y plan BRONZE
+#Al inicio del menú se consulta por pantalla que plan tendrá descuento.
+#Luego programa generará los descuentos correspondientes cada vez que se ingrese una nueva venta al sistema:
+#se analiza si el plan ingresado = plan con descuento. Si lo es, se genera el descuento y se guarda el resultado en IMPORTE. 
+def determinar_plan_descuento(): 
+    print("""***SELECCION DE PLAN CON 20% DESCUENTO***
+          1 - PLAN GOLD
+          2 - PLAN SILVER
+          3 - PLAN BRONZE""")
+    plan_descuento = int(input("SELECCIONE UNA OPCION: "))
+    return plan_descuento
+#--------------------------------- FUNCIONES Y PROCEDIMIENTOS DE OPCION 5 ---------------------------------
+#cargar_os_nueva: obtiene ciertos datos de una venta y los ingresa en un variable de tipo ObraSocial, el cual se cargará en la lista de obra sociales
+#Se ingresa como DATOS DE ENTRADA: una venta, y la lista de obra sociales por pasaje de parametro por REFERENCIA. 
+def cargar_os_nueva(venta, lista_Recaudado_OS): 
+            ObraSocial=verObraSocial(venta)                         #Obtiene el nombre de la obra social
+            Monto=verImporte(venta)                         #Obtiene el importe de una venta
+                
+            o_s=crearObraSocial()                           
+            cargarObraSocial(o_s, ObraSocial, Monto)        #Carga los datos obtenidos a la obra social creada
+            agregarObraSocial(lista_Recaudado_OS, o_s)      #Agrega la obra social a la lista de obra sociales
+
+#Imprimir_informe_Tot_Recaudado_OS: imprime la lista de obras sociales, el cual contiene, los nombre de las O.S junto a sus montos totales recaudados respectivamente.
+#Se ingresa como DATOS DE ENTRADA: la lista de obra sociales por parametro por COPIA
+def Imprimir_informe_Tot_Recaudado_OS(lista_Recaudado_OS):
+    print("***INFORME DE TOTAL RECAUDADO POR OBRA SOCIAL***")
+    
+    i = 1                                                   #Inicializa la variable de control
+    while (i<=tamanio(lista_Recaudado_OS)):                 #Repite condicionalmente mientras haya ventas por recorrer en la lista
+        o_s = recuperarObraSocial(lista_Recaudado_OS,i)     #Recupera una venta de la lista en la posicion i
+
+        #Impresión de datos de la venta i     
+        print(f"""
+            Nombre de obra social: {verNom(o_s)}
+            Total recaudado: {verTot(o_s)}
+        """)
+
+        i=i+1
+
+#generar_informe_tot_recaudado_os: genera el calculo del totoal recaudado por cada obra social:
+#Se ingresa como DATOS DE ENTRADA: la lista de obra sociales por COPIA
+def generar_informe_tot_recaudado_os(lista_venta):
+
+    lista_recaudado_os = crearListaObraSocial()
+
+    i = 1
+    while (i<=tamanio(lista_venta)):                                #Repite condicionalmente hasta quer la lista haya sido plenamente recorrida
+        venta = recuperarVenta(lista_venta,i)                       #Recupera la venta i-esima de la lista y la guarda en la var venta
+        
+        #Ingresa si la listaRecaudado esta vacia, osea si es la 1er iteración, y carga la 1er obrasocial junto a su monto
+        if(tamanio(lista_recaudado_os) == 0):
+            
+            cargar_os_nueva(venta, lista_recaudado_os)              #invoco procedimiento para cargar la 1ra obra social a la lista
+            i=i+1           #incremento variable de control
+        else:
+            j = False
+            n = 1         
+            #flag: se activa si se encontro una obra social equivalente a la existente
+            #Compara el nombre de la venta en la posicion i-esima con todos los nombre de los nodos obras_Social pertenecientes a la lista_recaudado_os
+            #Entonces la flag se activa UNICAMENTE si encuentra la unica coincidencia. Si nunca la encuentra, entonces esa obra social nunca se cargo
+            while ( n < tamanio(lista_recaudado_os) and (j != True)):                 #Busca una obra social equivalente
+                    
+                os_aux=recuperarObraSocial(lista_recaudado_os, n)                      #Recupera una obra social en la posicion n
+                 
+                if( verObraSocial(venta).lower() == verNom(os_aux).lower()):                                 #Compara la obra social en la posi n con la venta en la posi i
+                    monto_final= verTot(os_aux) + verImporte(venta)                   #Acumula el monto que recaudo esa venta de la = obra social
+                    modificarTot(os_aux, monto_final)
+                    j= True                                                            #Activa la bandera, y aborta la repitición condicional. 
+                                 
+                    i=i+1                                                              #Incrementa la var de control i                                                         
+                
+                else:
+                    n=n+1                                                               #Incrementa la var de control n
+
+            #Se verifica si la flag esta activada
+            if(j != True):
+                cargar_os_nueva(venta, lista_recaudado_os)           #Carga el nom y monto de OS, de la venta q no encontro ninguna equivalencia antes
+                i=i+1
+    
+    
+    return lista_recaudado_os
+
+
 #--------------------------------- FUNCION DE OPCION 6 ---------------------------------
 
 def eliminar_Droga_UltimoMes (lista,drogaB,fechaActual):
@@ -69,7 +154,7 @@ def imprimirVenta(venta):
     -NOMBRE DEL MEDICAMENTO: {verNombre(venta).upper()}
     -DROGA: {verDroga(venta).upper()}
     -OBRA SOCIAL DEL CLIENTE: {verObraSocial(venta).upper()}
-    -PLAN: {verPlan(venta).upper()}
+    -PLAN: {verPlan(venta)}
     -IMPORTE: {verImporte(venta)}
     -FECHA: {fecha.strftime("%d")}/{fecha.strftime("%m")}/{fecha.strftime("%Y")} {fecha.strftime("%X")}
             \n""")
@@ -112,6 +197,9 @@ lista_ventas = crearListaVentas()
 
 print("\n\n*** BIENVENIDOS AL PROGRAMA REGISTRAR VENTAS FARMACEUTICAS *** \n\n")
 
+#Se consulta el plan que poseera el 20% de descuento
+plan_con_descuento = determinar_plan_descuento()                    #Resolución punto 4)b
+
 opcion = MENU()
 
 #CAMBIAR POR CASE
@@ -130,11 +218,16 @@ while (opcion != 0):
                 nom = input("Ingrese el nombre del medicamento: ").lower()
                 dro = input("Ingrese la droga: ").lower()
                 os = input("Ingrese la Obra Social: ").lower()
-                plan = input("Ingrese el plan: ").lower()
+                plan = int(input("Ingrese el plan: "))
                 imp = float(input("Ingrese el importe: "))
                 
                 # Pedir al usuario que introduzca la fecha y hora
                 fechaD = ingreso_de_FechayHora()
+
+                #Se evalua si corresponde un 20% respecto el plan ingresado
+                if plan_con_descuento == plan:
+                    imp = imp - (imp*20/100)
+                    print(f"Se aplico el descuento correspondiente al plan ",plan)
 
                 cargarVenta(venta, cod, nom, dro, os, plan, imp, fechaD)
                 agregarVenta(lista_ventas, venta)
@@ -161,7 +254,10 @@ while (opcion != 0):
 
         #Mostrar informe (total recaudado) de todas las Obras sociales
         case 5:
-            print("...\n")
+            print("Generando informe de total recaudado por obra social...")
+            lista_tot_obra_social = generar_informe_tot_recaudado_os(lista_ventas)
+            print("informe generado existosamente")
+            Imprimir_informe_Tot_Recaudado_OS(lista_tot_obra_social)
 
         #Eliminar venta por droga y las mismas registradas en el ultimo mes
         case 6:
@@ -280,5 +376,4 @@ while (opcion != 0):
 print("El programa finalizó.")   
     
 
-#cuando uso una variable nombreD, la de represeneta DESEADA (ingresada x el usuario)
 
