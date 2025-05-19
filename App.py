@@ -151,12 +151,12 @@ def imprimirVenta(venta):
     #Imprimir los datos de una venta
     fecha = verFechaHora(venta)
     print(f"""\n-CODIGO DEL MEDICAMENTO: {verCodigo(venta)}
-    -NOMBRE DEL MEDICAMENTO: {verNombre(venta).upper()}
-    -DROGA: {verDroga(venta).upper()}
-    -OBRA SOCIAL DEL CLIENTE: {verObraSocial(venta).upper()}
-    -PLAN: {verPlan(venta)}
-    -IMPORTE: {verImporte(venta)}
-    -FECHA: {fecha.strftime("%d")}/{fecha.strftime("%m")}/{fecha.strftime("%Y")} {fecha.strftime("%X")}
+-NOMBRE DEL MEDICAMENTO: {verNombre(venta).upper()}
+-DROGA: {verDroga(venta).upper()}
+-OBRA SOCIAL DEL CLIENTE: {verObraSocial(venta).upper()}
+-PLAN: {verPlan(venta)}
+-IMPORTE: {verImporte(venta)}
+-FECHA: {fecha.strftime("%d")}/{fecha.strftime("%m")}/{fecha.strftime("%Y")} {fecha.strftime("%X")}
             \n""")
 
 def imprimirListaVentas(lista):
@@ -227,7 +227,7 @@ while (opcion != 0):
                 #Se evalua si corresponde un 20% respecto el plan ingresado
                 if plan_con_descuento == plan:
                     imp = imp - (imp*20/100)
-                    print(f"Se aplico el descuento correspondiente al plan ",plan)
+                    print(f"Se aplicó el descuento correspondiente al plan",plan)
 
                 cargarVenta(venta, cod, nom, dro, os, plan, imp, fechaD)
                 agregarVenta(lista_ventas, venta)
@@ -249,13 +249,13 @@ while (opcion != 0):
                     break
             while control:
                 print("\n¿Qué quiere modificar?\n")
-                print("\n1 - Código del medicamento\n")
-                print("\n2 - Nombre del medicamento\n")
-                print("\n3 - Droga del medicamento\n")
-                print("\n4 - Obra Social asociada a la venta\n")
-                print("\n5 - Importe de la venta\n")
-                print("\n6 - Fecha y hora de la venta\n")
-                print("\n7 - Salir\n")
+                print("1 - Código del medicamento")
+                print("2 - Nombre del medicamento")
+                print("3 - Droga del medicamento")
+                print("4 - Obra Social asociada a la venta")
+                print("5 - Importe de la venta")
+                print("6 - Fecha y hora de la venta")
+                print("7 - Salir\n")
                 try:
                     mod=int(input("Seleccionar: "))
                 except ValueError:
@@ -264,21 +264,27 @@ while (opcion != 0):
                 if mod==1:
                     nuevo=int(input("Ingrese nuevo código del medicamento: "))
                     cambiarCodigo(vent, nuevo)
+                    print("Código modificado con éxito. \n")
                 elif mod==2:
                     nuevo=input("Ingrese nuevo nombre del medicamento: ").lower()
                     cambiarNombre(vent, nuevo)
+                    print("Nombre modificado con éxito. \n")
                 elif mod==3:
                     nuevo=input("Ingrese nueva droga del medicamento: ").lower()
                     cambiarDroga(vent, nuevo)
+                    print("Droga modificada con éxito. \n")
                 elif mod==4:
                     nuevo=input("Ingrese nueva obra social asociada a la venta: ").lower()
                     cambiarObraSocial(vent, nuevo)
+                    print("Obra Social modificada con éxito. \n")
                 elif mod==5:
                     nuevo=float(input("Ingrese nuevo importe de la venta: "))
                     cambiarImporte(vent, nuevo)
+                    print("Importe modificado con éxito. \n")
                 elif mod==6:
                     nuevo=ingreso_de_FechayHora()
                     cambiarFechaHora(vent, nuevo)
+                    print("Fecha y hora modificada con éxito. \n")
                 elif mod==7:
                     control=False
                 else:
@@ -289,7 +295,7 @@ while (opcion != 0):
             
         
         case 3:
-            #Eliminar venta especifica de la Lista por Codigo de medicamento
+            #Eliminar venta especifica de la lista por codigo de medicamento
             if tamanio(lista_ventas)==0:
                 print("No hay ventas para eliminar.\n")
             else:
@@ -303,6 +309,7 @@ while (opcion != 0):
                         print("\nVenta eliminada con éxito.\n")
                         eliminado = True
                         break
+                    i += 1
                 if not eliminado:
                     print("No se encontró venta con el código ingresado.\n")
         
