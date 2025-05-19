@@ -236,13 +236,75 @@ while (opcion != 0):
                 
             print("\nFinalización de ingreso de nuevas ventas de medicamentos. \n")
 
-        #Modificar una venta especifica de la Lista por Codigo del Medicamento
+        
         case 2:
-            print("...\n")
+            #Modificar una venta especifica de la lista por nombre del medicamento
+            nombre=input("Ingrese el nombre del medicamento a modificar: ").lower()
+            encontrado=False
+            for i in range(1, tamanio(lista_ventas)+1):
+                vent=recuperarVenta(lista_ventas, i)
+                if verNombre(vent)==nombre:
+                    encontrado=True
+                    control=True
+                    break
+            while control:
+                print("\n¿Qué quiere modificar?\n")
+                print("\n1 - Código del medicamento\n")
+                print("\n2 - Nombre del medicamento\n")
+                print("\n3 - Droga del medicamento\n")
+                print("\n4 - Obra Social asociada a la venta\n")
+                print("\n5 - Importe de la venta\n")
+                print("\n6 - Fecha y hora de la venta\n")
+                print("\n7 - Salir\n")
+                try:
+                    mod=int(input("Seleccionar: "))
+                except ValueError:
+                    print("\nEl número ingresado no es válido\n")
+                    continue
+                if mod==1:
+                    nuevo=int(input("Ingrese nuevo código del medicamento: "))
+                    cambiarCodigo(vent, nuevo)
+                elif mod==2:
+                    nuevo=input("Ingrese nuevo nombre del medicamento: ").lower()
+                    cambiarNombre(vent, nuevo)
+                elif mod==3:
+                    nuevo=input("Ingrese nueva droga del medicamento: ").lower()
+                    cambiarDroga(vent, nuevo)
+                elif mod==4:
+                    nuevo=input("Ingrese nueva obra social asociada a la venta: ").lower()
+                    cambiarObraSocial(vent, nuevo)
+                elif mod==5:
+                    nuevo=float(input("Ingrese nuevo importe de la venta: "))
+                    cambiarImporte(vent, nuevo)
+                elif mod==6:
+                    nuevo=ingreso_de_FechayHora()
+                    cambiarFechaHora(vent, nuevo)
+                elif mod==7:
+                    control=False
+                else:
+                    print("\nOpción no válida\n")  
+                    continue
+            if not encontrado:
+                print("No se encontró venta con el nombre ingresado\n")
             
-        #Eliminar venta especifica de la Lista por Codigo de medicamento
+        
         case 3:
-            print("...\n")
+            #Eliminar venta especifica de la Lista por Codigo de medicamento
+            if tamanio(lista_ventas)==0:
+                print("No hay ventas para eliminar.\n")
+            else:
+                codigo=int(input("Ingrese el código del medicamento a eliminar: "))
+                i=1
+                eliminado=False
+                while i<=tamanio(lista_ventas):
+                    venta=recuperarVenta(lista_ventas, i)
+                    if verCodigo(venta)==codigo:
+                        eliminarVenta(lista_ventas, venta)
+                        print("\nVenta eliminada con éxito.\n")
+                        eliminado = True
+                        break
+                if not eliminado:
+                    print("No se encontró venta con el código ingresado.\n")
         
         case 4:
         #Mostrar todas las ventas registradas
