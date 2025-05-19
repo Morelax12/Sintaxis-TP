@@ -1,0 +1,16 @@
+TAD Lista Obra Social - Especificación
+
+crearListaObraSocial()
+- Crea y retorna una lista vacía
+
+agregarObraSocial(listaObraSocial, obraSocial)
+- Agrega una obra social a la lista
+
+eliminarObraSocial(listaObraSocial, obraSocial)
+- Elimina una obra social de la lista
+
+recuperarObraSocial(listaObraSocial, i)
+- Recupera la i-ésima obra social de la lista
+
+tamanioListaObraSocial(listaObraSocial)
+- Retorna la cantidad de obras sociales de la lista

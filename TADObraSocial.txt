@@ -1,0 +1,22 @@
+TAD Obra Social - Especificación
+
+crearObraSocial()
+- Crea y retorna una obra social vacía
+
+cargarObraSocial(obraSocial, nombre, total)
+- Asigna valores a una obra social
+
+verNom(obraSocial)
+- Retorna el nombre de la obra social
+
+verTot(obraSocial)
+- Retorna el total de la obra social
+
+modificarNom(obraSocial, nombre)
+- Modifica el nombre de la obra social
+
+modificarTot(obraSocial, total)
+- Modifica el total de la obra social
+
+copiarObraSocial(obraSocial1, obraSocial2)
+- Copia los datos de la obraSocial1 a la obraSocial2
