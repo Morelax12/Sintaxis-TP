@@ -302,14 +302,15 @@ while (opcion != 0):
                 codigo=int(input("Ingrese el código del medicamento a eliminar: "))
                 i=1
                 eliminado=False
-                while i<=tamanio(lista_ventas):
-                    venta=recuperarVenta(lista_ventas, i)
+                while i<=tamanio(lista_ventas(c)):
+                    venta=recuperarVenta(lista_ventas(c, i))
                     if verCodigo(venta)==codigo:
-                        eliminarVenta(lista_ventas, venta)
+                        eliminarVenta(c, lista_ventas)
+                        i=tamanio(lista_ventas(c))+1
                         print("\nVenta eliminada con éxito.\n")
                         eliminado = True
-                        break
-                    i += 1
+                    else:    
+                     i = i+ 1
                 if not eliminado:
                     print("No se encontró venta con el código ingresado.\n")
         
