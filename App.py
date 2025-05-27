@@ -265,7 +265,7 @@ while (opcion != 0):
             print("Ingreso de nuevas ventas de medicamentos. \n")
             s = "si"
             while (s == "si"):
-                print("Carga de una venta nueva. \n")
+                print("Carga de una venta nueva.")
                 venta = crearVenta()
                 cod = int(input("Ingrese el código del medicamento: "))
                 nom = input("Ingrese el nombre del medicamento: ").lower()
@@ -356,10 +356,16 @@ while (opcion != 0):
                 i=1
                 eliminado=False
                 while i<=tamanio(lista_ventas):
+<<<<<<< HEAD
                     venta=recuperarVenta(lista_ventas,i)
                     if verCodigo(venta)==codigo:
                         eliminarVenta(lista_ventas,venta)
                         i=tamanio(lista_ventas)+1
+=======
+                    venta=recuperarVenta(lista_ventas, i)
+                    if verCodigo(venta)==codigo:
+                        eliminarVenta(lista_ventas, venta)
+>>>>>>> 927681f12f3bb6deeaf60e8cb21825ee2cdb67c6
                         print("\nVenta eliminada con éxito.\n")
                         eliminado = True
                     else:    
