@@ -19,10 +19,12 @@ def MENU ():
     "6- Eliminar ventas por Droga \n" \
     "7- Mostrar Ventas registradas por Obra Social\n" \
     "8- Mostrar Ventas registradas en el Dia \n"
+    "9- Mostrar informe de planes con descuento"
     "0- Salir del sistema")
     a= int(input(": "))
-    print("\n***********\n")
-    return a  
+    print("\n*\n")
+
+    return a
 
 #--------------------------------- FUNCION DE DESCUENTO PARA PLAN ESPECIFICO ---------------------------------
 
@@ -123,8 +125,10 @@ def eliminar_Droga_UltimoMes (lista,drogaB,fechaActual):
 
         if verDroga(v) == drogaB and vFecha.month == fechaActual.month and vFecha.year == fechaActual.year: #evalia si la droga del elem V es = a la ingresada x el usuario, lo mismo para la fecha
             agregarVenta(auxLista,v) #guarda las ventas que van a ser eliminadas
-            eliminarVenta(lista, v)
-        else:
+            eliminarVenta(lista, v) #al eliminar una venta el i=1 no representa a la misma venta que antes de eliminar una venta, entonces se vuelve a ejecutar el bucle 
+
+
+        else: #si la venta no cumple con la condicion(if) debe aumentar el indice, para evaluar la siguiente venta
             i+=1
 
     return auxLista
@@ -145,6 +149,54 @@ def ingreso_de_FechayHora():
     print("Fecha y hora ingresadas:", fecha_dt)
 
     return fecha_dt
+
+#--------------------------------- FUNCION DE DESCUENTO PARA PLAN ESPECIFICO: OPCION 9 ---------------------------------
+
+#Se considera el usuario cargará una cantidad LIMITADA de planes: Plan GOLD, plan SILVER, y plan BRONZE
+#El descuento se generará a partir de una opcion del menú, donde se pregunta por pantalla que plan poseera el descuento.
+#Luego programa generará los descuentos correspondientes recorriendo la lista de ventas:
+#se analiza si el plan ingresado = plan con descuento. Si lo es, se genera el descuento y se GUARDA el resultado en IMPORTE.
+#Asi mismo, se informa por pantalla un listado de las ventas modificadas, desvelando (código, nombre, droga, obra social, 
+# importe original e importe final) de cada una.
+
+#Se ingresa como DATOS DE ENTRADA: lista ventas por pasaje de parametro por REFERENCIA.
+def generar_descuento_plan(lista_venta):
+
+    print("""SELECCION DE PLAN CON 20% DESCUENTO**                      
+          1 - PLAN GOLD
+          2 - PLAN SILVER
+          3 - PLAN BRONZE""")
+    plan_descuento = int(input("Seleccione una opcion: ")) 
+    print(f"Plan seleccionado: {plan_descuento}")
+    
+    print("Generando descuentos...")
+    i=1
+    while( i <= tamanio(lista_venta)):
+        venta = recuperarVenta(lista_venta,i)
+        j = False
+                                                                               #flag: demuestra que existe almenos una venta con el plan ingresado
+        if (plan_descuento.lower() == verPlan(venta).lower()):                           #Ingresa si encuentra planes coincidentes al seleccionado por el usuario
+            importe_original = verImporte(venta)
+            cambiarImporte(venta) = verImporte(venta) -  (verImporte(venta)*20/100)     #Genera y guarda el descuento en la lista de ventas
+            j = True
+
+            #Imprime los datos de la venta modificada
+            print(f"""Venta {i}:                                                        
+                  Codigo: {verCodigo(venta)}
+                  Nombre: {verNombre(venta)}
+                  Droga: {verDroga(venta)}
+                  Obra Social: {verObraSocial(venta)}
+                  Importe original: {importe_original}
+                  Importe aplicado el descuento: {verImporte(venta)}
+                  """)
+            
+            i=i+1
+        else:
+            i=i+1                                                                      #incrementa la variable de control
+    
+    if (j == False):                                                                    #Ingresa si no se encontro ningun plan concordante al ingresado
+        print("El plan seleccionado no pertenece a ninguna venta")
+
 
 #--------------------------------- FUNCIONES DE IMPRESION ---------------------------------
 
@@ -303,15 +355,15 @@ while (opcion != 0):
                 codigo=int(input("Ingrese el código del medicamento a eliminar: "))
                 i=1
                 eliminado=False
-                while i<=tamanio(lista_ventas(c)):
-                    venta=recuperarVenta(lista_ventas(c, i))
+                while i<=tamanio(lista_ventas):
+                    venta=recuperarVenta(lista_ventas,i)
                     if verCodigo(venta)==codigo:
-                        eliminarVenta(c, lista_ventas)
-                        i=tamanio(lista_ventas(c))+1
+                        eliminarVenta(lista_ventas,venta)
+                        i=tamanio(lista_ventas)+1
                         print("\nVenta eliminada con éxito.\n")
                         eliminado = True
                     else:    
-                     i = i+ 1
+                        i = i+ 1
                 if not eliminado:
                     print("No se encontró venta con el código ingresado.\n")
         
@@ -340,7 +392,7 @@ while (opcion != 0):
                 # Verificar si la droga existe en la lista
                 droga_encontrada = False #creamos una bandera (para verificar si algo ocurrio(true) sino (false), la inicalizamos en false)
 
-                for venta in lista_ventas: #recorre la lista ventas, en venta se almacena cada venta encontrada
+                for i in range (1 ,tamanio(lista_ventas)+1): #recorre la lista ventas, en venta se almacena cada venta encontrada
                     if verDroga(venta).lower() == drogaD.lower(): #verifica si la droga se encuentra en la lista de ventas
                         droga_encontrada = True
                         break
@@ -387,7 +439,7 @@ while (opcion != 0):
                 #verificamos que la obrasocialD exista en el listado de ventas
                 obraS_encontrada=False
 
-                for venta in lista_ventas:
+                for i in range (1 ,tamanio(lista_ventas)+1):
                     if verObraSocial(venta).lower() == obraSocialD.lower():
                         obraS_encontrada = True
                         break
@@ -404,7 +456,7 @@ while (opcion != 0):
                 #si se encuentra la obra social(obraS = true)
                 else:
                     #recorremos la lista
-                    for venta in lista_ventas:
+                    for i in range (1 ,tamanio(lista_ventas)+1):
                         #evaluamos si la O.S de la venta recuperada es igual a la desada
                         if verObraSocial(venta).lower() == obraSocialD.lower():
                             encolar(colaObrasS,venta)
@@ -432,7 +484,7 @@ while (opcion != 0):
 
                 #para tener en cuenta la venta en el informe(fechaRecu), esta debe: ser el mismo dia,mes y año que fechaD, y la hora debe ser menor o igual a la de fechaD
                 if( fechaRecu.day == fechaD.day and fechaRecu.month == fechaD.month and fechaRecu.year == fechaD.year and fechaRecu.hour <= fechaD.hour):
-                    
+                    #luego evaluamos los minutos, xq si lo ponemos en el primer if, podria ser que una venta 11:40 y la hora max es 12:20, 40>20 entonces en el primer if no cumpliria la condicion y dejaria ventas afueras
                     if(fechaRecu.minute <= fechaD.minute):
 
                         cantM  += 1                             #aumentamos el contador de medicamentos, ya que la venta fue valida(pertenece al mismo dia)
