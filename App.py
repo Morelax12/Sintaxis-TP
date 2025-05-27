@@ -86,7 +86,7 @@ def generar_informe_tot_recaudado_os(lista_venta):
             #flag: se activa si se encontro una obra social equivalente a la existente
             #Compara el nombre de la venta en la posicion i-esima con todos los nombre de los nodos obras_Social pertenecientes a la lista_recaudado_os
             #Entonces la flag se activa UNICAMENTE si encuentra la unica coincidencia. Si nunca la encuentra, entonces esa obra social nunca se cargo
-            while ( n < tamanio(lista_recaudado_os) and (j != True)):                 #Busca una obra social equivalente
+            while ( n <= tamanio(lista_recaudado_os) and (j != True)):                 #Busca una obra social equivalente
                     
                 os_aux=recuperarObraSocial(lista_recaudado_os, n)                      #Recupera una obra social en la posicion n
                  
@@ -124,7 +124,8 @@ def eliminar_Droga_UltimoMes (lista,drogaB,fechaActual):
         if verDroga(v) == drogaB and vFecha.month == fechaActual.month and vFecha.year == fechaActual.year: #evalia si la droga del elem V es = a la ingresada x el usuario, lo mismo para la fecha
             agregarVenta(auxLista,v) #guarda las ventas que van a ser eliminadas
             eliminarVenta(lista, v)
-        i+=1
+        else:
+            i+=1
 
     return auxLista
 
@@ -429,10 +430,13 @@ while (opcion != 0):
                 fechaRecu = verFechaHora(v)        #obtenemos la fecha de la venta recuperada, para luego usarla como condicion
 
                 #para tener en cuenta la venta en el informe(fechaRecu), esta debe: ser el mismo dia,mes y año que fechaD, y la hora debe ser menor o igual a la de fechaD
-                if( fechaRecu.day == fechaD.day and fechaRecu.month == fechaD.month and fechaRecu.year == fechaD.year and  fechaRecu.hour <= fechaD.hour and fechaRecu.minute <= fechaD.minute):
-                    cantM  += 1                             #aumentamos el contador de medicamentos, ya que la venta fue valida(pertenece al mismo dia)
-                    montoVenta = verImporte(v)              #obtenemos cuanto valio la venta
-                    montoTotal = montoTotal + montoVenta    #sumamos al total el monto de la venta
+                if( fechaRecu.day == fechaD.day and fechaRecu.month == fechaD.month and fechaRecu.year == fechaD.year and fechaRecu.hour <= fechaD.hour):
+                    
+                    if(fechaRecu.minute <= fechaD.minute):
+
+                        cantM  += 1                             #aumentamos el contador de medicamentos, ya que la venta fue valida(pertenece al mismo dia)
+                        montoVenta = verImporte(v)              #obtenemos cuanto valio la venta
+                        montoTotal = montoTotal + montoVenta    #sumamos al total el monto de la venta
                     
                 i += 1
                     
