@@ -16,7 +16,7 @@ def MENU ():
     "3- Eliminar venta especifica\n" \
     "4- Mostrar listado de ventas registradas\n" \
     "5- Mostrar informe de Obras Sociales\n" \
-    "6- Eliminar ventas por Droga \n" \
+    "6- Eliminar ventas por Droga del ultimo mes\n" \
     "7- Mostrar Ventas registradas por Obra Social\n" \
     "8- Mostrar Ventas registradas en el Dia \n"
     "9- Mostrar informe de planes con descuento"
@@ -175,9 +175,10 @@ def generar_descuento_plan(lista_venta):
         venta = recuperarVenta(lista_venta,i)
         j = False
                                                                                #flag: demuestra que existe almenos una venta con el plan ingresado
-        if (plan_descuento.lower() == verPlan(venta).lower()):                           #Ingresa si encuentra planes coincidentes al seleccionado por el usuario
+        if (plan_descuento == verPlan(venta)):                           #Ingresa si encuentra planes coincidentes al seleccionado por el usuario
             importe_original = verImporte(venta)
-            cambiarImporte(venta) = verImporte(venta) -  (verImporte(venta)*20/100)     #Genera y guarda el descuento en la lista de ventas
+            importeNuevo= verImporte(venta) - (verImporte(venta)*20/100)     #Genera y guarda el descuento en la lista de ventas
+            cambiarImporte(venta,importeNuevo) 
             j = True
 
             #Imprime los datos de la venta modificada
@@ -265,14 +266,47 @@ while (opcion != 0):
             print("Ingreso de nuevas ventas de medicamentos. \n")
             s = "si"
             while (s == "si"):
-                print("Carga de una venta nueva.")
+                print("Carga de una venta nueva. \n")
                 venta = crearVenta()
-                cod = int(input("Ingrese el código del medicamento: "))
+
+                #carga codigo
+                while True:
+                    try:
+                        cod = int(input("Ingrese el código del medicamento: "))
+                        break  # Sale del bucle si no hay error
+
+                    except ValueError:
+                        print("Error: ingresá un número entero válido.")
+                
+
                 nom = input("Ingrese el nombre del medicamento: ").lower()
                 dro = input("Ingrese la droga: ").lower()
                 os = input("Ingrese la Obra Social: ").lower()
-                plan = int(input("Ingrese el plan: "))
-                imp = float(input("Ingrese el importe: "))
+                #ingresar plan
+                while True:
+
+                    print("""*** SELECCIONE EL PLAN ***
+                        1 - PLAN GOLD
+                        2 - PLAN SILVER
+                        3 - PLAN BRONZE""")
+                    plan = int(input("Opcion: "))
+
+                    if plan <= 3 and plan > 0:
+                        break
+                    else:
+                        print("Plan invalido,vuelva a intentarlo \n")
+
+                #ingresar importe
+                while True:
+                    
+                    imp = float(input("Ingrese el importe: "))
+                    try:
+                        if imp < 0:
+                            raise ValueError("El importe no puede ser negativo\n")
+                        break
+                    except ValueError:
+                        print("El importe es invalido,vuelva a intentarlo\n")
+
                 
                 # Pedir al usuario que introduzca la fecha y hora
                 fechaD = ingreso_de_FechayHora()
@@ -356,16 +390,10 @@ while (opcion != 0):
                 i=1
                 eliminado=False
                 while i<=tamanio(lista_ventas):
-<<<<<<< HEAD
                     venta=recuperarVenta(lista_ventas,i)
                     if verCodigo(venta)==codigo:
                         eliminarVenta(lista_ventas,venta)
                         i=tamanio(lista_ventas)+1
-=======
-                    venta=recuperarVenta(lista_ventas, i)
-                    if verCodigo(venta)==codigo:
-                        eliminarVenta(lista_ventas, venta)
->>>>>>> 927681f12f3bb6deeaf60e8cb21825ee2cdb67c6
                         print("\nVenta eliminada con éxito.\n")
                         eliminado = True
                     else:    
@@ -398,7 +426,10 @@ while (opcion != 0):
                 # Verificar si la droga existe en la lista
                 droga_encontrada = False #creamos una bandera (para verificar si algo ocurrio(true) sino (false), la inicalizamos en false)
 
-                for i in range (1 ,tamanio(lista_ventas)+1): #recorre la lista ventas, en venta se almacena cada venta encontrada
+                for i in range (1 ,tamanio(lista_ventas)+1): #recorre la lista ventas, en ventaRecu se almacena cada venta encontrada
+
+                    ventaRecu= recuperarVenta(lista_ventas,i)
+
                     if verDroga(venta).lower() == drogaD.lower(): #verifica si la droga se encuentra en la lista de ventas
                         droga_encontrada = True
                         break
@@ -445,7 +476,10 @@ while (opcion != 0):
                 #verificamos que la obrasocialD exista en el listado de ventas
                 obraS_encontrada=False
 
-                for i in range (1 ,tamanio(lista_ventas)+1):
+                for i in range (1 ,tamanio(lista_ventas)):
+
+                    venta = recuperarVenta(lista_ventas,i)
+
                     if verObraSocial(venta).lower() == obraSocialD.lower():
                         obraS_encontrada = True
                         break
@@ -455,14 +489,16 @@ while (opcion != 0):
                     print(f"\nLa Obra Social '{obraSocialD}' no se encuentra registrada en las ventas.\n")
                     
                     #opciones 
-                    eleccion = input("¿Desea intentar con otra droga? (S/N): ").strip().lower() #strip elimina espacios en blanco al inicio y al final
+                    eleccion = input("¿Desea intentar con otra Obra social? (S/N): ").strip().lower() #strip elimina espacios en blanco al inicio y al final
                     if eleccion != 's':
                         print("Volviendo al menú principal...\n")
                         break  # Salimos del while general (opción 6)   
                 #si se encuentra la obra social(obraS = true)
                 else:
                     #recorremos la lista
-                    for i in range (1 ,tamanio(lista_ventas)+1):
+                    for i in range (1 ,tamanio(lista_ventas)):
+                        venta= recuperarVenta(lista_ventas,i)
+                        
                         #evaluamos si la O.S de la venta recuperada es igual a la desada
                         if verObraSocial(venta).lower() == obraSocialD.lower():
                             encolar(colaObrasS,venta)
@@ -502,6 +538,10 @@ while (opcion != 0):
             print("\n\n ** INFORME DE LAS VENTAS ** \n\n" \
             "-CANTIDAD DE MEDICAMENTOS VENDIDOS HASTA LA FECHA: ",cantM,"\n" \
             "-MONTO TOTAL RECAUDADO: ",montoTotal,"\n")
+
+        #Genera e imprime el informe de ventas con planes con descuento
+        case 9:
+            generar_descuento_plan(lista_ventas)
 
     opcion = MENU()
 
