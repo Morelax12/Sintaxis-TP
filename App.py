@@ -390,10 +390,9 @@ while (opcion != 0):
                 i=1
                 eliminado=False
                 while i<=tamanio(lista_ventas):
-                    venta=recuperarVenta(lista_ventas,i)
+                    venta=recuperarVenta(lista_ventas, i)
                     if verCodigo(venta)==codigo:
-                        eliminarVenta(lista_ventas,venta)
-                        i=tamanio(lista_ventas)+1
+                        eliminarVenta(lista_ventas, venta)
                         print("\nVenta eliminada con éxito.\n")
                         eliminado = True
                     else:    
