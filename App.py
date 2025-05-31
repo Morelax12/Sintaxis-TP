@@ -19,7 +19,7 @@ def MENU ():
     "6- Eliminar ventas por Droga del ultimo mes\n" \
     "7- Mostrar Ventas registradas por Obra Social\n" \
     "8- Mostrar Ventas registradas en el Dia \n"
-    "9- Mostrar informe de planes con descuento"
+    "9- Mostrar informe de planes con descuento\n"
     "0- Salir del sistema")
     a= int(input(": "))
     print("\n*\n")
@@ -162,20 +162,13 @@ def ingreso_de_FechayHora():
 #Se ingresa como DATOS DE ENTRADA: lista ventas por pasaje de parametro por REFERENCIA.
 def generar_descuento_plan(lista_venta):
 
-    print("""SELECCION DE PLAN CON 20% DESCUENTO**                      
-          1 - PLAN GOLD
-          2 - PLAN SILVER
-          3 - PLAN BRONZE""")
-    plan_descuento = int(input("Seleccione una opcion: ")) 
-    print(f"Plan seleccionado: {plan_descuento}")
-    
     print("Generando descuentos...")
     i=1
+    j = False
     while( i <= tamanio(lista_venta)):
         venta = recuperarVenta(lista_venta,i)
-        j = False
                                                                                #flag: demuestra que existe almenos una venta con el plan ingresado
-        if (plan_descuento == verPlan(venta)):                           #Ingresa si encuentra planes coincidentes al seleccionado por el usuario
+        if (plan_con_descuento == verPlan(venta)):                           #Ingresa si encuentra planes coincidentes al seleccionado por el usuario
             importe_original = verImporte(venta)
             importeNuevo= verImporte(venta) - (verImporte(venta)*20/100)     #Genera y guarda el descuento en la lista de ventas
             cambiarImporte(venta,importeNuevo) 
@@ -327,56 +320,60 @@ while (opcion != 0):
         case 2:
             #Modificar una venta especifica de la lista por nombre del medicamento
             nombre=input("Ingrese el nombre del medicamento a modificar: ").lower()
+            control=False
             encontrado=False
             for i in range(1, tamanio(lista_ventas)+1):
                 vent=recuperarVenta(lista_ventas, i)
                 if verNombre(vent)==nombre:
                     encontrado=True
                     control=True
-                    break
-            while control:
-                print("\n¿Qué quiere modificar?\n")
-                print("1 - Código del medicamento")
-                print("2 - Nombre del medicamento")
-                print("3 - Droga del medicamento")
-                print("4 - Obra Social asociada a la venta")
-                print("5 - Importe de la venta")
-                print("6 - Fecha y hora de la venta")
-                print("7 - Salir\n")
-                try:
-                    mod=int(input("Seleccionar: "))
-                except ValueError:
-                    print("\nEl número ingresado no es válido\n")
-                    continue
-                if mod==1:
-                    nuevo=int(input("Ingrese nuevo código del medicamento: "))
-                    cambiarCodigo(vent, nuevo)
-                    print("Código modificado con éxito. \n")
-                elif mod==2:
-                    nuevo=input("Ingrese nuevo nombre del medicamento: ").lower()
-                    cambiarNombre(vent, nuevo)
-                    print("Nombre modificado con éxito. \n")
-                elif mod==3:
-                    nuevo=input("Ingrese nueva droga del medicamento: ").lower()
-                    cambiarDroga(vent, nuevo)
-                    print("Droga modificada con éxito. \n")
-                elif mod==4:
-                    nuevo=input("Ingrese nueva obra social asociada a la venta: ").lower()
-                    cambiarObraSocial(vent, nuevo)
-                    print("Obra Social modificada con éxito. \n")
-                elif mod==5:
-                    nuevo=float(input("Ingrese nuevo importe de la venta: "))
-                    cambiarImporte(vent, nuevo)
-                    print("Importe modificado con éxito. \n")
-                elif mod==6:
-                    nuevo=ingreso_de_FechayHora()
-                    cambiarFechaHora(vent, nuevo)
-                    print("Fecha y hora modificada con éxito. \n")
-                elif mod==7:
-                    control=False
-                else:
-                    print("\nOpción no válida\n")  
-                    continue
+
+                    
+                while control:
+                    print(f"Venta {i}:")
+                    print("\n¿Qué quiere modificar?\n")
+                    print("1 - Código del medicamento")
+                    print("2 - Nombre del medicamento")
+                    print("3 - Droga del medicamento")
+                    print("4 - Obra Social asociada a la venta")
+                    print("5 - Importe de la venta")
+                    print("6 - Fecha y hora de la venta")
+                    print("7 - Salir\n")
+                    try:
+                        mod=int(input("Seleccionar: "))
+                    except ValueError:
+                        print("\nEl número ingresado no es válido\n")
+                        continue
+                    if mod==1:
+                        nuevo=int(input("Ingrese nuevo código del medicamento: "))
+                        cambiarCodigo(vent, nuevo)
+                        print("Código modificado con éxito. \n")
+                    elif mod==2:
+                        nuevo=input("Ingrese nuevo nombre del medicamento: ").lower()
+                        cambiarNombre(vent, nuevo)
+                        print("Nombre modificado con éxito. \n")
+                    elif mod==3:
+                        nuevo=input("Ingrese nueva droga del medicamento: ").lower()
+                        cambiarDroga(vent, nuevo)
+                        print("Droga modificada con éxito. \n")
+                    elif mod==4:
+                        nuevo=input("Ingrese nueva obra social asociada a la venta: ").lower()
+                        cambiarObraSocial(vent, nuevo)
+                        print("Obra Social modificada con éxito. \n")
+                    elif mod==5:
+                        nuevo=float(input("Ingrese nuevo importe de la venta: "))
+                        cambiarImporte(vent, nuevo)
+                        print("Importe modificado con éxito. \n")
+                    elif mod==6:
+                        nuevo=ingreso_de_FechayHora()
+                        cambiarFechaHora(vent, nuevo)
+                        print("Fecha y hora modificada con éxito. \n")
+                    elif mod==7:
+                        control=False
+                    else:
+                        print("\nOpción no válida\n")  
+                        continue
+
             if not encontrado:
                 print("No se encontró venta con el nombre ingresado\n")
             
@@ -412,8 +409,12 @@ while (opcion != 0):
         case 5:
             print("Generando informe de total recaudado por obra social...")
             lista_tot_obra_social = generar_informe_tot_recaudado_os(lista_ventas)
-            print("informe generado existosamente")
-            Imprimir_informe_Tot_Recaudado_OS(lista_tot_obra_social)
+
+            if (tamanio(lista_tot_obra_social) == 0):
+                print("No se pudo generar el informe ya que no existen ventas")
+            else:    
+                print("informe generado existosamente")
+                Imprimir_informe_Tot_Recaudado_OS(lista_tot_obra_social)
 
         #Eliminar venta por droga y las mismas registradas en el ultimo mes
         case 6:
@@ -475,7 +476,7 @@ while (opcion != 0):
                 #verificamos que la obrasocialD exista en el listado de ventas
                 obraS_encontrada=False
 
-                for i in range (1 ,tamanio(lista_ventas)):
+                for i in range (1 ,tamanio(lista_ventas)+1):
 
                     venta = recuperarVenta(lista_ventas,i)
 
@@ -495,7 +496,7 @@ while (opcion != 0):
                 #si se encuentra la obra social(obraS = true)
                 else:
                     #recorremos la lista
-                    for i in range (1 ,tamanio(lista_ventas)):
+                    for i in range (1 ,tamanio(lista_ventas)+1):
                         venta= recuperarVenta(lista_ventas,i)
                         
                         #evaluamos si la O.S de la venta recuperada es igual a la desada
