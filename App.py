@@ -4,13 +4,16 @@ from datetime import datetime
 from TADventa import *
 from TADListaVentas import *
 from TADcolaObraSoc import *
-from TAD_lista_obra_social import*
-from TAD_obra_social import*
+from TAD_lista_obra_social import *
+from TAD_obra_social import *
+from terminaltexteffects.effects.effect_matrix import Matrix
+from terminaltexteffects.effects.effect_slide import Slide
+from terminaltexteffects.utils.graphics import Color
 
 #------------------------------------------------ FUNCIONES PARA EL PROGRAMA ------------------------------------------------
 def MENU ():
 
-    print("*** ADMINISTRAR LAS VENTAS FARMACEUTICAS ***\n\n" \
+    effect = Matrix("*** ADMINISTRAR LAS VENTAS FARMACEUTICAS ***\n\n" \
     "1- Registrar nuevas ventas\n" \
     "2- Modificar venta especifica\n" \
     "3- Eliminar venta especifica\n" \
@@ -21,6 +24,16 @@ def MENU ():
     "8- Mostrar Ventas registradas en el Dia \n"
     "9- Mostrar informe de planes con descuento\n"
     "0- Salir del sistema")
+
+    effect.effect_config.merge = True
+    effect.effect_config.rain_time = .5
+    effect.effect_config.rain_fall_delay_range = [0, 1]
+    #Dejar simbolos por defecto o cambiar a 0 y 1
+    effect.effect_config.rain_symbols = ["0", "1"]
+    with effect.terminal_output() as terminal:
+        for frame in effect:
+            terminal.print(frame)
+
     a= int(input(": "))
     print("\n*\n")
 
@@ -32,12 +45,20 @@ def MENU ():
 #Al inicio del menú se consulta por pantalla que plan tendrá descuento.
 #Luego programa generará los descuentos correspondientes cada vez que se ingrese una nueva venta al sistema:
 #se analiza si el plan ingresado = plan con descuento. Si lo es, se genera el descuento y se guarda el resultado en IMPORTE. 
-def determinar_plan_descuento(): 
-    print("""***SELECCION DE PLAN CON 20% DESCUENTO***
+def determinar_plan_descuento():
+
+    effect = Slide("""***SELECCION DE PLAN CON 20% DESCUENTO***
           1 - PLAN GOLD
           2 - PLAN SILVER
-          3 - PLAN BRONZE""")
-    plan_descuento = int(input("SELECCIONE UNA OPCION: "))
+          3 - PLAN BRONZE\n
+SELECCIONE UNA OPCION""")
+    effect.effect_config.merge = True
+    effect.effect_config.final_gradient_stops = (Color("008F11"), Color("008F11"))
+    with effect.terminal_output() as terminal:
+        for frame in effect:
+            terminal.print(frame)
+
+    plan_descuento = int(input(": "))
     return plan_descuento
 #--------------------------------- FUNCIONES Y PROCEDIMIENTOS DE OPCION 5 ---------------------------------
 #cargar_os_nueva: obtiene ciertos datos de una venta y los ingresa en un variable de tipo ObraSocial, el cual se cargará en la lista de obra sociales
@@ -242,7 +263,15 @@ lista_ventas = crearListaVentas()
 
 #--------------------------------- PROGRAMA ---------------------------------
 
-print("\n\n*** BIENVENIDOS AL PROGRAMA REGISTRAR VENTAS FARMACEUTICAS *** \n\n")
+#print("\n\n*** BIENVENIDOS AL PROGRAMA REGISTRAR VENTAS FARMACEUTICAS *** \n\n")
+
+effect = Slide("\n\n*** BIENVENIDOS AL PROGRAMA REGISTRAR VENTAS FARMACEUTICAS *** \n\n")
+effect.effect_config.merge = True
+effect.effect_config.final_gradient_stops = (Color("008F11"), Color("008F11"))
+with effect.terminal_output() as terminal:
+    for frame in effect:
+        terminal.print(frame)
+
 
 #Se consulta el plan que poseera el 20% de descuento
 plan_con_descuento = determinar_plan_descuento()                    #Resolución punto 4)b
@@ -544,8 +573,13 @@ while (opcion != 0):
             generar_descuento_plan(lista_ventas)
 
     opcion = MENU()
+   
+effect = Slide("El programa finalizó.")
+effect.effect_config.merge = True
+effect.effect_config.final_gradient_stops = (Color("008F11"), Color("008F11"))
+with effect.terminal_output() as terminal:
+    for frame in effect:
+        terminal.print(frame)
 
-print("El programa finalizó.")   
-    
 
 
