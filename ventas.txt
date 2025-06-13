@@ -1,0 +1,8 @@
+01,modificar,ibuprofeno,ioma,1,2500,01/05/2025 07:00
+02,eliminar,ibuprofeno,galeno,2,3000,02/05/2025 10:30
+03,ibuevanol,ibuprofeno,osde,2,3000,10/05/2025 07:50
+04,Vicoprofen,ibuprofeno,osde,3,5000,12/05/2025 12:45
+05,buscapina,pantoprazol,ioma,1,4000,12/05/2025 13:45
+05,buscapina,pantoprazol,ioma,1,4000,12/06/2025 13:45
+
+

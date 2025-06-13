@@ -253,6 +253,34 @@ def imprimirCola_de_ObrasSociales(cola):
             -FECHA DE LA VENTA: {fecha.strftime("%d")}/{fecha.strftime("%m")}/{fecha.strftime("%Y")} {fecha.strftime("%X")}
         """)
     
+def precargar_ventas_desde_archivo(nombre_archivo):
+    ventas = []
+    with open(nombre_archivo, 'r') as archivo:
+        for linea in archivo:
+            partes = linea.strip().split(',')
+            if len(partes) == 7:
+                try:
+                    cod = int(partes[0])
+                    nom = partes[1].lower()
+                    dro = partes[2].lower()
+                    os = partes[3].lower()
+                    plan = int(partes[4])
+                    imp = float(partes[5])
+                    fecha_str = partes[6]
+                    fechaD = datetime.strptime(fecha_str, "%d/%m/%Y %H:%M")
+
+                    # Aplicar descuento si corresponde
+                    if plan_con_descuento == plan:
+                        imp -= imp * 0.20
+
+                    venta = crearVenta()
+                    cargarVenta(venta, cod, nom, dro, os, plan, imp, fechaD)
+                    agregarVenta(lista_ventas, venta)
+                except Exception as e:
+                    print(f"Error al procesar línea: {linea} -> {e}")
+            else:
+                print(f"Línea con formato inválido: {linea}")
+    
 
 
 #------------------------------------------------ SIMULACION DEL PROGRAMA ------------------------------------------------
@@ -275,6 +303,11 @@ with effect.terminal_output() as terminal:
 
 #Se consulta el plan que poseera el 20% de descuento
 plan_con_descuento = determinar_plan_descuento()                    #Resolución punto 4)b
+
+opcion_Precar =input(" Desea realizar una precarga de ventas ? si/no: \n")
+if(opcion_Precar.lower() == "si"):
+    precargar_ventas_desde_archivo("ventas.txt")
+    imprimirListaVentas(lista_ventas)
 
 opcion = MENU()
 
@@ -458,8 +491,8 @@ while (opcion != 0):
                 for i in range (1 ,tamanio(lista_ventas)+1): #recorre la lista ventas, en ventaRecu se almacena cada venta encontrada
 
                     ventaRecu= recuperarVenta(lista_ventas,i)
-
-                    if verDroga(venta).lower() == drogaD.lower(): #verifica si la droga se encuentra en la lista de ventas
+                    
+                    if verDroga(ventaRecu).strip().lower() == drogaD.strip().lower():#verifica si la droga se encuentra en la lista de ventas
                         droga_encontrada = True
                         break
                 
@@ -531,7 +564,7 @@ while (opcion != 0):
                         #evaluamos si la O.S de la venta recuperada es igual a la desada
                         if verObraSocial(venta).lower() == obraSocialD.lower():
                             encolar(colaObrasS,venta)
-
+                    print(f"\n **** VENTAS REGISTRADAS POR LA OBRA SOCIAL {obraSocialD.upper()} ****\n ")
                     imprimirCola_de_ObrasSociales(colaObrasS)
                     break #salimos del while principal
 
